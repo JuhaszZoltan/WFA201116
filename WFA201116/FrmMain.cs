@@ -22,8 +22,10 @@ namespace WFA201116
             InitializeComponent();
         }
 
-        private void FrmMain_Load(object sender, EventArgs e)
+
+        private void DgvFill()
         {
+            dgvTurazok.Rows.Clear();
             conn.Open();
             var r = new SqlCommand("SELECT * FROM turazo;", conn)
                 .ExecuteReader();
@@ -35,6 +37,24 @@ namespace WFA201116
                 dgvTurazok.Rows.Add(r[0], r[1], r[2], r[3], r[4]);
             }
             conn.Close();
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            DgvFill();
+        }
+
+        private void DgvTurazok_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var frm = new FrmUtvonal(conn, (int)dgvTurazok[0, e.RowIndex].Value);
+            frm.ShowDialog();
+        }
+
+        private void BtnUjSzemely_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmUjTurazo(conn);
+            frm.ShowDialog();
+            DgvFill();
         }
     }
 }
